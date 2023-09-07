@@ -7,8 +7,12 @@ parser = ArgumentParser(
 parser.add_argument("--from", default="list.txt", dest="source_file", type=str, help="Path to txt file with input names")
 parser.add_argument("--to", default="list.txt", type=str, help="Path to file with generated results")
 parser.add_argument("-og", "--off-generator", action="store_true", help="Off generating files")
-
 args = parser.parse_args()
+
+
+def append_telesales_mail_address(string: str, postfix: str = "@telesales-service.org") -> str:
+    return f"{string}{postfix}"
+
 
 def from_bad_name_to_good(name: str) -> str:
     separated_name = name.split()
