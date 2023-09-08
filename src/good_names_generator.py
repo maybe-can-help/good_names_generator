@@ -33,7 +33,7 @@ def from_bad_name_to_good(name: str) -> str:
     surname = separated_name[0]
     name = separated_name[1]
     patronymic = separated_name[2]
-    return f"{surname}.{name[0]}.{patronymic[0]}\n"
+    return f"{surname}.{name[0]}.{patronymic[0]}"
 
     
 def transliterate(name):
@@ -57,29 +57,38 @@ def transliterate(name):
 
 def main():
     result = []
-    
     # If true - Terminal, false - pipe mode
     if stdin.isatty():
         with open(args.input, "r") as source_file:
             for n, line in enumerate(source_file):
                 try:
-                    new_line = from_bad_name_to_good(line)
+                    new_line = from_bad_name_to_good(line)+"\n"
                     if args.transliteration:
                         new_line = transliterate(new_line).lower()
                     result.append(new_line)
                 except IndexError:
                     print(f"Something wrong with {n+1} line ({repr(line)})")
-        
-        
         if not args.off_generator:
             with open(args.output, "w") as out_file:
                 for line in result:
                     out_file.write(line)
     else:
-        print("Pipe")
+        for n, line in enumerate(stdin):
+            try:
+                new_line = from_bad_name_to_good(line)
+                if args.transliteration:
+                    new_line = transliterate(new_line).lower()
+                result.append(new_line)
+            except IndexError:
+                print(f"Something wrong with {n+1} line ({repr(line)})")
+        if not args.off_generator:
+            with open(args.output, "w") as out_file:
+                for line in result:
+                    out_file.write(line)
+        else:
+            for line in result:
+                print(repr(line))
 
     
-
-
 if __name__ == "__main__":
     main()
