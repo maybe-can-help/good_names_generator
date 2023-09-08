@@ -12,9 +12,5 @@ pyinstaller --onefile src/good_names_generator.py
 ```
 
 ### Windows
-```console
-python -m venv venv
-source venv/vin/activate
-pip install pyinstaller
-pyinstaller --onefile src\good_names_generator.py
+```
 ```
