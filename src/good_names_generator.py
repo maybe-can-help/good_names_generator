@@ -62,9 +62,9 @@ def main():
         with open(args.input, "r") as source_file:
             for n, line in enumerate(source_file):
                 try:
-                    new_line = from_bad_name_to_good(line)+"\n"
+                    new_line = from_bad_name_to_good(line)
                     if args.transliteration:
-                        new_line = transliterate(new_line).lower()
+                        new_line = transliterate(new_line).lower() + "\n"
                     result.append(new_line)
                 except IndexError:
                     print(f"Something wrong with {n+1} line ({repr(line)})")
