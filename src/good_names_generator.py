@@ -59,7 +59,7 @@ def main():
     result = []
     # If true - Terminal, false - pipe mode
     if stdin.isatty():
-        with open(args.input, "r") as source_file:
+        with open(args.input, "r", encoding="utf-8") as source_file:
             for n, line in enumerate(source_file):
                 try:
                     new_line = from_bad_name_to_good(line)
@@ -69,7 +69,7 @@ def main():
                 except IndexError:
                     print(f"Something wrong with {n+1} line ({repr(line)})")
         if not args.off_generator:
-            with open(args.output, "w") as out_file:
+            with open(args.output, "w", encoding="utf-8") as out_file:
                 for line in result:
                     out_file.write(line)
     else:
