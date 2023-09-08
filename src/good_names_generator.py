@@ -25,7 +25,7 @@ def transliterate(string):
     return string 
 
 
-def generate_cert_name(name: [str], transliteration: bool = True) -> str:
+def generate_cert_name(name: str, transliteration: bool = True) -> str:
     if transliteration:
         name = transliterate(name)
     separated_name = name.split() 
@@ -47,8 +47,12 @@ def emails(argparse_arguments):
         except FileNotFoundError:
             print(f"File {argparse_arguments.inputfile} does not exists")
         try:
-            for n, line in enumerate(inputfile):
-                result.append(add_email_prefix(generate_cert_name(line)) + "\n")
+            if argparse_arguments.from_certnames:
+                for n, line in enumerate(inputfile):
+                    result.append(add_email_prefix(line) + "\n")
+            else:
+                for n, line in enumerate(inputfile):
+                    result.append(add_email_prefix(generate_cert_name(line)) + "\n")
         except IndexError:
             print(f"Something wrong with {n+1} line ({repr(line)})")
         inputfile.close()
@@ -118,20 +122,21 @@ generator_commands = generator.add_subparsers()
 parser_certnames = generator_commands.add_parser("certnames")
 parser_certnames.add_argument("--from", dest="inputfile", help="Path to file with names")
 parser_certnames.add_argument("--to", dest="outputfile", help="Path to output file (Will be generated if does not exist)")
-parser_certnames.add_argument("-dg", "--disable-generator", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_certnames.add_argument("-a", "--append", dest="append_to_outputfile", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_certnames.add_argument("-p", "--printing", dest="enable_printing", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_certnames.add_argument("--encoding", type=str, default="utf-8", help="Path to output file (Will be generated if does not exist)")
+parser_certnames.add_argument("-dg", "--disable-generator", action="store_true", help="")
+parser_certnames.add_argument("-a", "--append", dest="append_to_outputfile", action="store_true", help="")
+parser_certnames.add_argument("-p", "--printing", dest="enable_printing", action="store_true", help="Enable result printing ")
+parser_certnames.add_argument("--encoding", type=str, default="utf-8", help="Change encoding")
 parser_certnames.set_defaults(func=certnames)
 
 
 parser_emails = generator_commands.add_parser("emails")
 parser_emails.add_argument("--from", dest="inputfile", help="Path to file with names")
 parser_emails.add_argument("--to", dest="outputfile", help="Path to output file (Will be generated if does not exist)")
-parser_emails.add_argument("-dg", "--disable-generator", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_emails.add_argument("-a", "--append", dest="append_to_outputfile", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_emails.add_argument("-p", "--printing", dest="enable_printing", action="store_true", help="Path to output file (Will be generated if does not exist)")
-parser_emails.add_argument("--encoding", type=str, default="utf-8", help="Path to output file (Will be generated if does not exist)")
+parser_emails.add_argument("-dg", "--disable-generator", action="store_true", help="")
+parser_emails.add_argument("-a", "--append", dest="append_to_outputfile", action="store_true", help="")
+parser_emails.add_argument("-p", "--printing", dest="enable_printing", action="store_true", help="Enable result printing ")
+parser_emails.add_argument("--from-certnames", action="store_true", help="")
+parser_emails.add_argument("--encoding", type=str, default="utf-8", help="Change encoding")
 parser_emails.set_defaults(func=emails)
 
 
